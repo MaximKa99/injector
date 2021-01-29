@@ -7,6 +7,7 @@ public class InjectionEntity {
     Scope scope;
     String tag;
     Object object;
+    Object[] args;
 
     public InjectionEntity(Class<?> clazz, Scope scope, Object object, String tag) {
         this.clazz = clazz;
@@ -15,6 +16,14 @@ public class InjectionEntity {
         this.tag = tag;
     }
 
+    public InjectionEntity(Class<?> clazz, Scope scope, String tag, Object object, Object[] args) {
+        this.clazz = clazz;
+        this.scope = scope;
+        this.tag = tag;
+        this.object = object;
+        this.args = args;
+    }
+    
     public InjectionEntity(Class<?> clazz, Scope scope, Object object) {
         this.clazz = clazz;
         this.scope = scope;
@@ -28,7 +37,7 @@ public class InjectionEntity {
     public Class<?> getClazz() {
         return clazz;
     }
-
+    
     public String getTag() {
         return tag;
     }
@@ -56,4 +65,14 @@ public class InjectionEntity {
     public void setObject(Object object) {
         this.object = object;
     }
+
+    public Object[] getArgs() {
+        return args;
+    }
+
+    public void setArgs(Object[] args) {
+        this.args = args;
+    }
+
+    
 }

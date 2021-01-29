@@ -31,6 +31,38 @@ public class Injector{
         }
     }
 
+    public static void add(Class<?> type, Scope scope, Object[] args) throws Exception {
+        InjectionEntity entity;
+        if (scope == Scope.SINGLETON) {
+            Class<?>[] classes = new Class<?>[args.length];
+            int i = 0;
+            for (Object arg : args) {
+                classes[i] = arg.getClass();
+                i++;
+            }
+            Constructor<?> constructor = type.getConstructor(classes);
+            Object object = constructor.newInstance(args);
+            entity = new InjectionEntity(type, scope, object);
+            container.add(entity);
+        }
+        else {
+            try {
+                Class<?>[] classes = new Class<?>[args.length];
+                int i = 0;
+                for (Object arg : args) {
+                    classes[i] = arg.getClass();
+                    i++;
+                }
+                Constructor<?> constructor = type.getConstructor(classes);
+                entity = new InjectionEntity(type, scope, constructor);
+                entity.setArgs(args);
+                container.add(entity);
+            } catch (NoSuchMethodException ex) {
+                throw ex;
+            }
+        }
+    }
+
     public static void add(Class<?> type, Scope scope, String tag) throws Exception {
         InjectionEntity entity;
         if (scope == Scope.SINGLETON) {
@@ -40,6 +72,38 @@ public class Injector{
         else {
             try {
                 entity = new InjectionEntity(type, scope, type.getConstructor(), tag);
+                container.add(entity);
+            } catch (NoSuchMethodException ex) {
+                throw ex;
+            }
+        }
+    }
+
+    public static void add(Class<?> type, Scope scope, Object[] args, String tag) throws Exception {
+        InjectionEntity entity;
+        if (scope == Scope.SINGLETON) {
+            Class<?>[] classes = new Class<?>[args.length];
+            int i = 0;
+            for (Object arg : args) {
+                classes[i] = arg.getClass();
+                i++;
+            }
+            Constructor<?> constructor = type.getConstructor(classes);
+            Object object = constructor.newInstance(args);
+            entity = new InjectionEntity(type, scope, object, tag);
+            container.add(entity);
+        }
+        else {
+            try {
+                Class<?>[] classes = new Class<?>[args.length];
+                int i = 0;
+                for (Object arg : args) {
+                    classes[i] = arg.getClass();
+                    i++;
+                }
+                Constructor<?> constructor = type.getConstructor(classes);
+                entity = new InjectionEntity(type, scope, constructor, tag);
+                entity.setArgs(args);
                 container.add(entity);
             } catch (NoSuchMethodException ex) {
                 throw ex;
@@ -57,7 +121,12 @@ public class Injector{
                 if (entity.getScope().equals(Scope.SINGLETON)) {
                     object = entity.getObject();
                 } else {
-                    object = ((Constructor) entity.getObject()).newInstance();
+                    if (entity.getArgs() == null){
+                        object = ((Constructor) entity.getObject()).newInstance();
+                    }
+                    else {
+                        object = ((Constructor) entity.getObject()).newInstance(entity.getArgs());
+                    }
                 }
             }
         }
@@ -79,7 +148,12 @@ public class Injector{
                     if (entity.getScope().equals(Scope.SINGLETON)) {
                         object = entity.getObject();
                     } else {
-                        object = ((Constructor) entity.getObject()).newInstance();
+                        if (entity.getArgs() == null){
+                            object = ((Constructor) entity.getObject()).newInstance();
+                        }
+                        else {
+                            object = ((Constructor) entity.getObject()).newInstance(entity.getArgs());
+                        }
                     }
                 }
             }

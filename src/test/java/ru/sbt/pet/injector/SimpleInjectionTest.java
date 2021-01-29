@@ -11,7 +11,7 @@ import ru.sbt.pet.injector.injector.Scope;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class InjectionTest {
+public class SimpleInjectionTest {
 
     @Test
     public void test_addB_takeB_success() {
