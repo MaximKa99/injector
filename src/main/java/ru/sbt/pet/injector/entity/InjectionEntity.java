@@ -1,4 +1,4 @@
-package ru.sbt.pet.injector.model;
+package ru.sbt.pet.injector.entity;
 
 import ru.sbt.pet.injector.injector.Scope;
 
